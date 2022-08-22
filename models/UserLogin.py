@@ -8,5 +8,6 @@ from pydantic import Field
 class UserLogin(UserBase):
     password: str = Field(
         ...,
-        max_length=50
+        min_length=8,
+        max_length=64
     )

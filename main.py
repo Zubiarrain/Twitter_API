@@ -2,6 +2,7 @@
 from models.UserBase import UserBase
 from models.User import User
 from models.UserLogin import UserLogin
+from models.Tweet import Tweet
 
 # Pydantic
 from pydantic import BaseModel
