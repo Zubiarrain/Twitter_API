@@ -1,4 +1,5 @@
 # Models
+from doctest import Example
 from .UserBase import UserBase
 
 # Pydantic
@@ -9,5 +10,6 @@ class UserLogin(UserBase):
     password: str = Field(
         ...,
         min_length=8,
-        max_length=64
+        max_length=64,
+        example="nahuelitoperez123"
     )

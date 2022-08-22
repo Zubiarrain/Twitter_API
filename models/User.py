@@ -13,11 +13,13 @@ class User(UserBase):
     first_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Nahuel"
     )
     last_name: str = Field(
         ...,
         min_length=1,
-        max_length=50
+        max_length=50,
+        example="Zubiarrain"
     )
-    birth_date: Optional[date] = Field(default=None,)
+    birth_date: Optional[date] = Field(default=None)

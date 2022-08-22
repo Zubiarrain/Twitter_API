@@ -1,11 +1,13 @@
 # Models
 from models.UserBase import UserBase
+from models.UserRegister import UserRegister
 from models.User import User
 from models.UserLogin import UserLogin
 from models.Tweet import Tweet
 
 # Python
 from typing import List
+import json
 
 # Pydantic
 from pydantic import BaseModel
@@ -13,6 +15,7 @@ from pydantic import BaseModel
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
+from fastapi import Body
 
 app = FastAPI()
 
@@ -28,24 +31,34 @@ app = FastAPI()
     summary="Register a User",
     tags=["Users"]
 )
-def signup():
+def signup(user: UserRegister = Body(...)):
     """
     Sign Up
 
     This path operation register a user in the app
 
     Parameters:
-        - Request Body parameter
-            - user: UserRegister
+    - Request Body parameter
+        - user: UserRegister
     
     Returns a Json with the basic User information: 
-        - user_id: UUID
-        - email: EmailStr
-        - first_name: str
-        - last_name: str
-        _ birth_day: str
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    _ birth_day: datetime
     """
-    pass
+    with open("users.json","r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        user_dict = user.dict()
+        # A las siguientes variables no se las pasa a json automaticamente
+        user_dict["user_id"] = str(user_dict["user_id"]) 
+        user_dict["birth_date"] = str(user_dict["birth_date"])
+        results.append(user_dict)
+        f.seek(0) # Me muevo al primer byte
+        f.write(json.dumps(results))
+        return user
+
 
 
 ### Login a User
