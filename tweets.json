@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "This is my first tweet! I'm ready to be a backend developer",
+        "created_at": "2022-08-22 15:35:08.158367",
+        "updated_at": "2022-08-22 18:35:35.111000+00:00",
+        "by": {
+            "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "email": "user@example.com",
+            "first_name": "Nahuel",
+            "last_name": "Zubiarrain",
+            "birth_date": "2022-08-22"
+        }
+    },
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "This is my first tweet! I'm ready to be a backend developer",
+        "created_at": "2022-08-22 15:35:08.158367",
+        "updated_at": "2022-08-22 18:35:35.111000+00:00",
+        "by": {
+            "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "email": "user@example.com",
+            "first_name": "Nahuel",
+            "last_name": "Zubiarrain",
+            "birth_date": "2022-08-22"
+        }
+    },
+    {
+        "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "content": "This is my first tweet! I'm ready to be a backend developer",
+        "created_at": "2022-08-22 15:35:08.158367",
+        "updated_at": "2022-08-22 18:35:35.111000+00:00",
+        "by": {
+            "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "email": "user@example.com",
+            "first_name": "Nahuel",
+            "last_name": "Zubiarrain",
+            "birth_date": "2022-08-22"
+        }
+    }
+]
