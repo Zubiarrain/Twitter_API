@@ -29,6 +29,22 @@ app = FastAPI()
     tags=["Users"]
 )
 def signup():
+    """
+    Sign Up
+
+    This path operation register a user in the app
+
+    Parameters:
+        - Request Body parameter
+            - user: UserRegister
+    
+    Returns a Json with the basic User information: 
+        - user_id: UUID
+        - email: EmailStr
+        - first_name: str
+        - last_name: str
+        _ birth_day: str
+    """
     pass
 
 
