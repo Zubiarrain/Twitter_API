@@ -210,6 +210,8 @@ def delete_a_user(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="¡This person doesn't exist!"
             )
+
+
 ### Update a User
 @app.put(
     path="/users/{user_id}/update",
@@ -218,8 +220,50 @@ def delete_a_user(
     summary="Update a User",
     tags=["Users"]
 )
-def update_a_user():
-    pass
+def update_a_user(
+    user_id: UUID = Path(
+        ...,
+        title="User ID",
+        description=" Thi is the user identifier",
+        example="3fa85f64-5717-4562-b3fc-2c963f66afa7"
+    ),
+    user: UserRegister = Body(...)
+):
+    """
+    Update a user
+
+    This path operation update a user in the app
+
+    Parameters:
+    - Path parameter
+        - user_id: int --> user identifier
+    - Request Body Parameter
+        - user: UserRegister
+
+    Returns a json list with a user in the app, with the following keys:
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    - birth_day: datetime
+    """
+    with open("users.json","r",encoding="utf-8") as f:
+        results = json.loads(f.read())
+        user_dict = user.dict()
+        # A las siguientes variables no se las pasa a json automaticamente
+        user_dict["user_id"] = str(user_dict["user_id"]) 
+        user_dict["birth_date"] = str(user_dict["birth_date"])
+        user_updated_index = [results.index(user) for user in results if user["user_id"] == str(user_id)]
+        if user_updated_index:
+            results[user_updated_index[0]] = user_dict
+            with open("users.json","w",encoding="utf-8") as f:
+                f.write(json.dumps(results))
+                return results[user_updated_index[0]]
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="¡This person doesn't exist!"
+            )
 
 
 ## Tweets
