@@ -1,8 +1,7 @@
 # Models
-from models.UserBase import UserBase
+from uuid import UUID
 from models.UserRegister import UserRegister
 from models.User import User
-from models.UserLogin import UserLogin
 from models.Tweet import Tweet
 from models.LoginOut import LoginOut
 
@@ -11,13 +10,13 @@ from typing import List
 import json
 
 # Pydantic
-from pydantic import BaseModel
+from pydantic import EmailStr
 
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
 from fastapi import HTTPException
-from fastapi import Body, Form
+from fastapi import Body, Form, Path, Query
 
 app = FastAPI()
 
@@ -72,7 +71,7 @@ def signup(user: UserRegister = Body(...)):
     tags=["Users"]
 )
 def login(
-    email: str = Form(...),
+    email: EmailStr = Form(...),
     password: str = Form(...)
     ):
     """
@@ -115,12 +114,8 @@ def show_all_users():
 
     Parameters: none
 
-    Returns a json list with all users in thr app, with the following keys:
-    - user_id: UUID
+    Returns a json list with all users in thr app, with the following key:
     - email: EmailStr
-    - first_name: str
-    - last_name: str
-    - birth_day: datetime
     """
     with open("users.json","r",encoding="utf-8") as f:
         results = json.loads(f.read())
@@ -135,16 +130,24 @@ def show_all_users():
     summary="Show a User",
     tags=["Users"]
 )
-def show_a_user(user_id):
+def show_a_user(
+    user_id: UUID = Path(
+        ...,
+        title="User ID",
+        description=" Thi is the user identifier",
+        example="3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    )
+):
     """
     Show a user
 
     This path operation shows a user in the app
 
     Parameters:
-    -
+    - Path parameter
+        - user_id: int --> user identifier
 
-    Returns a json list with all users in thr app, with the following keys:
+    Returns a json list with a user in the app, with the following keys:
     - user_id: UUID
     - email: EmailStr
     - first_name: str
@@ -153,7 +156,13 @@ def show_a_user(user_id):
     """
     with open("users.json","r",encoding="utf-8") as f:
         results = json.loads(f.read())
-        return results
+        for user in results:
+            if user["user_id"] == str(user_id):
+                return user
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This person doesn't exist!"
+        )
 
 
 ### Delete a User
