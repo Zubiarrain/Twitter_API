@@ -1,5 +1,4 @@
 # Models
-from uuid import UUID
 from models.UserRegister import UserRegister
 from models.User import User
 from models.Tweet import Tweet
@@ -8,6 +7,7 @@ from models.LoginOut import LoginOut
 # Python
 from typing import List
 import json
+from uuid import UUID
 
 # Pydantic
 from pydantic import EmailStr
@@ -173,10 +173,43 @@ def show_a_user(
     summary="Delete a User",
     tags=["Users"]
 )
-def delete_a_user():
-    pass
+def delete_a_user(
+    user_id: UUID = Path(
+        ...,
+        title="User ID",
+        description=" Thi is the user identifier",
+        example="3fa85f64-5717-4562-b3fc-2c963f66afa7"
+    )
+):
+    """
+    Delete a user
 
+    This path operation delete a user in the app
 
+    Parameters:
+    - Path parameter
+        - user_id: int --> user identifier
+
+    Returns a json list with a user in the app, with the following keys:
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    - birth_day: datetime
+    """
+    with open("users.json","r",encoding="utf-8") as f:
+        results = json.loads(f.read())
+        user_deleted = [user for user in results if user["user_id"] == str(user_id)]
+        if user_deleted:
+            results.remove(user_deleted[0])
+            with open("users.json","w",encoding="utf-8") as f:
+                f.write(json.dumps(results))
+                return user_deleted[0]
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="¡This person doesn't exist!"
+            )
 ### Update a User
 @app.put(
     path="/users/{user_id}/update",
