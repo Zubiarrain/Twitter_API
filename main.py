@@ -4,6 +4,7 @@ from models.UserRegister import UserRegister
 from models.User import User
 from models.UserLogin import UserLogin
 from models.Tweet import Tweet
+from models.LoginOut import LoginOut
 
 # Python
 from typing import List
@@ -65,7 +66,7 @@ def signup(user: UserRegister = Body(...)):
 ### Login a User
 @app.post(
     path="/login",
-    response_model=User,
+    response_model=LoginOut,
     status_code=status.HTTP_200_OK,
     summary="Login a User",
     tags=["Users"]
@@ -95,12 +96,7 @@ def login(
         results = json.loads(f.read())
         for user in results:
             if user["email"] == email and user["password"] == password:
-                response = {key:value for key,value in user.items() if key != "password"}
-                return response
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="¡This person doesn't exist!"
-        )
+                return LoginOut(email=user["email"])
 
 
 ### Show All users
@@ -139,8 +135,25 @@ def show_all_users():
     summary="Show a User",
     tags=["Users"]
 )
-def show_a_user():
-    pass
+def show_a_user(user_id):
+    """
+    Show a user
+
+    This path operation shows a user in the app
+
+    Parameters:
+    -
+
+    Returns a json list with all users in thr app, with the following keys:
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    - birth_day: datetime
+    """
+    with open("users.json","r",encoding="utf-8") as f:
+        results = json.loads(f.read())
+        return results
 
 
 ### Delete a User
