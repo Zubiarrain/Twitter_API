@@ -15,7 +15,8 @@ from pydantic import BaseModel
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body
+from fastapi import HTTPException
+from fastapi import Body, Form
 
 app = FastAPI()
 
@@ -69,8 +70,37 @@ def signup(user: UserRegister = Body(...)):
     summary="Login a User",
     tags=["Users"]
 )
-def login():
-    pass
+def login(
+    email: str = Form(...),
+    password: str = Form(...)
+    ):
+    """
+    Login
+
+    This path operation Login a user in the app
+
+    Parameters:
+    - Form parameter
+        - email: str
+        - password: str
+    
+    Returns a Json with the basic User information: 
+    - user_id: UUID
+    - email: EmailStr
+    - first_name: str
+    - last_name: str
+    _ birth_day: datetime
+    """
+    with open("users.json","r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        for user in results:
+            if user["email"] == email and user["password"] == password:
+                response = {key:value for key,value in user.items() if key != "password"}
+                return response
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This person doesn't exist!"
+        )
 
 
 ### Show All users
