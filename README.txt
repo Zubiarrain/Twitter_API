@@ -1,1 +1,1 @@
-Twitter API
+Twitter API developed with FastAPI
